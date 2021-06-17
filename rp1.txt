@@ -1,0 +1,65 @@
+## INTRO-
+
+Face recognition is a computer vision task of identifying and verifying a person based on a photograph of their face.
+
+- **Face Verification / Authentication**. A one-to-one mapping of a given face against a known identity (e.g. *is this the person?*).
+- **Face Identification / Recognition**. A one-to-many mapping for a given face against a database of known faces (e.g. *who is this person?*).
+
+# Diagram -
+
+Phone → ← Server → ← Camera
+
+## Prior Work / Research Background -
+
+A number of packages / models etc have been developed for Face detection or recognition.
+Despite significant recent advances in the field of face recognition, implementing face verification and recognition efficiently at
+scale presents serious challenges to current approaches.
+The OpenCV library is developed primarily in C++ and unfortunately lacks dataset APIs or integrated analysis utilities. 
+We had to build it from the ground up for every new machine. No proper GPU support caused major problems for future change in hardware or 
+even different testing scenarios.
+
+During the first instance of our project, we chose to use Adam Geitgey's general Python-based face recognition API (Application Programming Interface).
+It was inefficient since it required retraining the SVM (Support Vector Machine) classifier every time the API was contacted, which took at least 27 seconds 
+each scan or request.
+We arrived upon FaceNet after doing some more research. FaceNet is a face recognition system developed in 2015 by researchers
+at Google that achieved then state-of-the-art results on a range of face recognition benchmark datasets.
+The FaceNet system can be used broadly thanks to multiple third-party open source implementations of 
+the model and the availability of pre-trained models.FaceNet can be used to extract high-quality features from faces, 
+referred to as face embeddings, which can subsequently be used to train a face recognition system.
+A face embedding is a system that, given a photograph of a face, extracts high-quality information from the face and predicts a 128-element vector representation of these features.
+The model is a deep convolutional neural network trained via a triplet loss function that encourages vectors for the same identity to become more similar (smaller distance),
+whereas vectors for different identities are expected to become less similar (larger distance). The focus on training a model to create embeddings directly
+(rather than extracting them from an intermediate layer of a model) was an important innovation in this work.
+These face embeddings were subsequently utilised to train classifier systems on conventional face recognition benchmark datasets, resulting in state-of-the-art results at the time.
+Other applications of the embeddings are explored in the paper, such as clustering to group like-faces based on extracted features.
+We discovered that it was resource hungry for our CPU and that it would require a good GPU to run. The paper was released in 2015, making it about half a decade old and nearly obsolete for use with new frameworks, libraries, and other technologies.
+Though it cleared the way for a slew of new face identification technologies that are significantly more efficient and tailored to specific workloads.
+We decided to follow FaceNet's rules and put them into practise in our own unique way. We are now utilising the MTCNN face detector, which extracts the face from a given image, then stores it as a NumPy array so that we can do operations
+on it, and finally extracts the face embeddings. The extracted faces and embeddings are then stored as a compressed NumPy array which we call a model. Using that model we can predict the class for our own locally supplied image.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
